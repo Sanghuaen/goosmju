@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ฟอร์มสั่งซื้อสินค้า ของที่ระลึก 30ปี สาขาวิชาวิทยาการคอมพิวเตอร์</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#1976D2',      
+                        'secondary-blue': '#2196F3',    
+                        'light-blue': '#E3F2FD',        
+                        'lighter-blue': '#BBDEFB',      
+                        'page-bg-blue': '#E0F2FE',      
+                        'form-bg-blue': '#F5FAFF',      
+                        'text-dark': '#37474F',         
+                        'accent-green': '#4CAF50',      
+                        'accent-red': '#EF5350',        
+                    },
+                    boxShadow: {
+                        'custom': '0 6px 20px rgba(0, 77, 64, 0.1)', 
+                        'focus-blue': '0 0 0 3px rgba(33, 150, 243, 0.2)', 
+                    fontFamily: {
+                        sans: ['Sarabun', 'sans-serif'], 
+                    }
+                }
+            }
+        }
+    };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+           
+        }
+
+        /* Custom scrollbar for product categories in Firefox */
+        #productCategories {
+            scrollbar-width: thin;
+            scrollbar-color: var(--tw-lighter-blue) transparent;
+        }
+
+        /* Custom scrollbar for product categories in Webkit (Chrome, Safari) */
+        #productCategories::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        #productCategories::-webkit-scrollbar-thumb {
+            background-color: var(--tw-lighter-blue);
+            border-radius: 10px;
+        }
+
+        #productCategories::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        /* Specific styles not easily covered by Tailwind, or for better control */
+        .radio-group input[type="radio"] {
+            margin-right: 0.5rem;
+           
+        }
+
+        .form-group input[type="file"] {
+            padding: 0.25rem 0;
+            
+        }
+
+        .color-dot {
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;           
+            margin-right: 0.5rem;            
+            border: 2px solid transparent;
+            flex-shrink: 0;           
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;           
+            box-sizing: border-box;
+            
+        }
+
+        input[type="radio"]:checked+.color-dot {
+            border-color: var(--tw-accent-green);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Hide default radio button but keep it accessible */
+        .form-radio.sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Add general form element styles for consistency */
+        .form-input,
+        .form-select,
+        .form-textarea {
+            @apply w-full p-2 border border-lighter-blue rounded-md focus:border-secondary-blue focus:ring-2 focus:ring-secondary-blue/20 outline-none transition-all duration-200;
+        }
+
+        .form-textarea {
+            @apply resize-y min-h-[60px];
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex justify-center items-start pt-5 pb-5 bg-page-bg-blue font-sans antialiased">
+
+    <div
+        class="main-container w-full max-w-4xl mx-auto border border-lighter-blue rounded-xl overflow-hidden bg-white shadow-custom">
+
+        <div class="header-section bg-primary-blue p-5 text-center text-white border-b border-[#1565c0]">
+            <h2 class="m-0 text-3xl font-semibold tracking-wide md:text-2xl">ของที่ระลึก 30ปี สาขาวิชาวิทยาการคอมพิวเตอร์</h2>
+        </div>
+
+        <div class="section-padding p-5 md:p-6">
+            <h3 class="section-title text-secondary-blue border-b-2 border-light-blue pb-3 mb-5 text-xl font-semibold md:text-lg">ข้อมูลลูกค้า</h3>
+            <form action="#" method="post" enctype="multipart/form-data">
+                <div class="form-group mb-4">
+                    <label for="customerFullName" class="block mb-2 font-bold text-gray-700">ชื่อ -นามสกุล:</label>
+                    <input type="text" id="customerFullName" name="customerFullName" placeholder="ป้อนชื่อและนามสกุล"
+                        required
+                        class="w-full p-2 border border-lighter-blue rounded-md focus:border-secondary-blue focus:ring-2 focus:ring-secondary-blue/20 outline-none transition-all duration-200">
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="customerAddress" class="block mb-2 font-bold text-gray-700">ที่อยู่:</label>
+                    <textarea id="customerAddress" name="customerAddress" rows="3" placeholder="ป้อนที่อยู่สำหรับจัดส่ง"
+                        required
+                        class="w-full p-2 border border-lighter-blue rounded-md resize-y min-h-[60px] focus:border-secondary-blue focus:ring-2 focus:ring-secondary-blue/20 outline-none transition-all duration-200"></textarea>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="customerPhone" class="block mb-2 font-bold text-gray-700">เบอร์โทรศัพท์:</label>
+                    <input type="tel" id="customerPhone" name="customerPhone"
+                        placeholder="ป้อนหมายเลขโทรศัพท์ " pattern="[0-9]{10}"
+                        title="กรุณาป้อนเบอร์โทรศัพท์ 10 หลัก" required
+                        class="w-full p-2 border border-lighter-blue rounded-md focus:border-secondary-blue focus:ring-2 focus:ring-secondary-blue/20 outline-none transition-all duration-200">
+                </div>
+                
+                <h3 class="section-title text-secondary-blue border-b-2 border-light-blue pb-3 mb-5 text-xl font-semibold md:text-lg">รายการสินค้า</h3>
+                <div id="productCategories" class="flex gap-3 mb-6 overflow-x-auto pb-3 justify-center">
+                    </div>
+
+                <div id="productDisplayArea"
+                    class="text-center p-6 bg-form-bg-blue rounded-lg shadow-md border border-lighter-blue">
+                    <img id="productImage" src="images/goods.png" alt="รูปสินค้า"
+                        class="max-w-[180px] h-[180px] object-cover mb-4 rounded-lg border border-light-blue shadow-sm mx-auto">
+                    <h4 id="productName" class="text-primary-blue mb-2 text-2xl font-medium">กรุณาเลือกสินค้า</h4>
+                    <p id="productPrice" class="text-secondary-blue text-lg mb-4"></p>
+                    <button id="addItemButton"
+                        class="bg-blue-400 text-white border-none px-6 py-3 rounded-full text-2xl cursor-pointer shadow-md hover:bg-blue-500 transform hover:-translate-y-0.5 transition-all duration-200 hidden">+</button>
+
+                    <div id="productDetails"
+                        class="mt-6 border border-lighter-blue p-5 rounded-lg text-left bg-light-blue hidden">
+                        <h5 class="text-primary-blue m-0 border-b border-dashed border-lighter-blue pb-3 mb-4 text-lg">
+                            เลือกตัวเลือก</h5>
+                        <div id="optionsContainer">
+                        </div>
+
+                        <div class="form-group mb-0 mt-2">
+                            <label for="itemQuantity" class="block mb-2 font-bold text-gray-700">จำนวน:</label>
+                            <input type="number" id="itemQuantity" name="itemQuantity" value="1" min="1"
+                                class=" md:w-40 form-input text-center">
+                        </div>
+
+                        <div class="form-group mb-0 mt-4">
+                            <label for="itemNotes" class="block mb-2 font-bold text-gray-700">รายละเอียดเพิ่มเติม
+                                (ไม่บังคับ):</label>
+                            <textarea id="itemNotes" name="itemNotes" rows="2"
+                                placeholder="ป้อนรายละเอียดเพิ่มเติม" class="form-textarea w-full"></textarea>
+                        </div>
+
+                        <button id="addToCartButton"
+                            class="bg-accent-green text-white border-none px-6 py-3 rounded-md cursor-pointer text-lg w-full mt-6 shadow-md hover:bg-green-600 transform hover:-translate-y-0.5 transition-all duration-200">เพิ่มเข้าตะกร้า</button>
+                    </div>
+                </div>
+
+                <div class="cart-summary mt-6 p-5 border border-dashed border-lighter-blue rounded-lg bg-form-bg-blue">
+                    <h3 class="m-0 mb-4 text-primary-blue border-b border-lighter-blue pb-3 text-xl font-semibold">
+                        สรุปรายการสั่งซื้อ</h3>
+                    <div id="cartItems" class="mb-4">
+                        <p class="text-center text-gray-500 p-2">ยังไม่มีสินค้าในตะกร้า</p>
+                    </div>
+
+                    <div class="summary-total text-right mt-5 pt-4 border-t border-dashed border-lighter-blue">
+                        <strong class="text-primary-blue text-lg">ยอดรวมสินค้า: </strong> <span id="totalItems"
+                            class="text-secondary-blue font-bold text-lg">0 ชิ้น</span>
+                    </div>
+                    <div class="summary-total text-right mt-2 pt-0 border-t-0">
+                        <strong class="text-primary-blue text-xl">ราคารวมทั้งหมด: </strong> <span id="totalPrice"
+                            class="text-red-600 font-bold text-2xl">0.00 บาท</span>
+                    </div>
+                </div>
+
+                <h3
+                    class="section-title text-secondary-blue border-b-2 border-light-blue pb-3 mb-5 text-xl font-semibold md:text-lg">
+                    การชำระเงินและการจัดส่ง</h3>
+                <div class="form-group mb-4">
+                    <label for="slipImage" class="block mb-2 font-bold text-gray-700">รูปภาพสลิปโอนเงิน:</label>
+                    <input type="file" id="slipImage" name="slipImage" accept="image/*" required class="py-1">
+                    <small class="block mt-1 text-gray-600">รองรับไฟล์รูปภาพเท่านั้น (.jpg, .png, .jpeg)</small>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="purchaseDate" class="block mb-2 font-bold text-gray-700">วันที่ซื้อ:</label>
+                    <input type="date" id="purchaseDate" name="purchaseDate" required
+                        class="w-full p-2 border border-lighter-blue rounded-md focus:border-secondary-blue focus:ring-2 focus:ring-secondary-blue/20 outline-none transition-all duration-200">
+                </div>
+
+                <div class="form-group radio-group mb-4">
+                    <label class="block mb-2 font-bold text-gray-700">ช่องทางการจัดส่ง:</label>
+                    <div class="mb-1">
+                        <input type="radio" id="delivery" name="deliveryOption" value="จัดส่ง" required>
+                        <label for="delivery" class="font-normal inline">จัดส่ง</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="pickup" name="deliveryOption" value="รับเอง">
+                        <label for="pickup" class="font-normal inline">รับเอง</label>
+                    </div>
+                </div>
+
+                <div class="form-group mb-0">
+                    <label for="paymentMethod" class="block mb-2 font-bold text-gray-700">ช่องทางการชำระเงิน:</label>
+                    <select id="paymentMethod" name="paymentMethod" required
+                        class="w-full p-2 border border-lighter-blue rounded-md focus:border-secondary-blue focus:ring-2 focus:ring-secondary-blue/20 outline-none transition-all duration-200">
+                        <option value="">-- เลือกช่องทางการชำระเงิน --</option>
+                        <option value="โอนเงินผ่านธนาคาร">โอนเงินผ่านธนาคาร</option>
+                        <option value="พร้อมเพย์">บัตรเดบิต / เครดิต</option>
+                        <option value="พร้อมเพย์">QRพร้อมเพย์</option>
+                        <option value="พร้อมเพย์">เก็บปลายทาง</option>
+                    </select>
+                </div>
+
+                <div class="submit-button-group text-center p-5 border-t border-lighter-blue bg-form-bg-blue mt-5">
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-6 py-3 border-none rounded-lg cursor-pointer text-xl w-full max-w-xs shadow-md hover:bg-blue-700 transform hover:-translate-y-0.5 transition-all duration-200">ยืนยันการสั่งซื้อ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Product Data (สำหรับจัดการข้อมูลสินค้า) ---
+            const products = {
+                'เสื้อ': {
+                    name: 'เสื้อ T-Shirt',
+                    price: 270,
+                    image: 'images/tshirt.png',
+                    options: {
+                        color: [
+                            { name: 'ขาว', class: 'bg-white', border: 'border-gray-300' },
+                            { name: 'ดำ', class: 'bg-black' },
+                            { name: 'เทา', class: 'bg-gray-400' },
+                            { name: 'แดง', class: 'bg-red-500' },
+                            { name: 'น้ำเงิน', class: 'bg-blue-500' }
+                        ],
+                        size: ['S', 'M', 'L', 'XL', 'XXL']
+                    }
+                },
+                'กระเป๋า': {
+                    name: 'กระเป๋าผ้า',
+                    price: 150,
+                    image: 'images/bag.png',
+                    options: {
+                        color: [
+                            { name: 'ดำ', class: 'bg-black' },
+                            { name: 'ขาว', class: 'bg-white' }
+                        ]
+                    }
+                },
+                'แก้ว': {
+                    name: 'แก้ว',
+                    price: 119,
+                    image: 'images/cup.png',
+                    options: {
+                        
+                    }
+                },
+                'หมวก': {
+                    name: 'หมวกแก๊ป',
+                    price: 150,
+                    image: 'images/cap.png',
+                    options: {
+                        color: [
+                            { name: 'ขาว', class: 'bg-white' },
+                            { name: 'น้ำเงิน', class: 'bg-blue-500' }
+                        ]
+                    }
+                },
+                'ร่ม': {
+                    name: 'ร่มพับ',
+                    price: 190,
+                    image: 'images/umbella.png',
+                    options: {
+                        
+                    }
+                },
+                'เข็มกลัด': {
+                    name: 'เข็มกลัดสัญลักษณ์',
+                    price: 60,
+                    image: 'images/pin.png',
+                    options: {
+
+                    }
+                },
+                'สมุด': {
+                    name: 'สมุดโน้ต',
+                    price: 30,
+                    image: 'images/notbook.png',
+                    options: {
+                    }
+                },
+                'ปากกา': {
+                    name: 'ปากกา',
+                    price: 20,
+                    image: 'images/pen.png',
+                    options: {
+                        color: [
+                            { name: 'ดำ', class: 'bg-black' },
+                            { name: 'น้ำเงิน', class: 'bg-blue-500' }
+                        ]
+                    }
+                }
+            };
+
+            // --- Elements ---
+            const productCategoriesDiv = document.getElementById('productCategories');
+            const productImage = document.getElementById('productImage');
+            const productName = document.getElementById('productName');
+            const productPrice = document.getElementById('productPrice');
+            const addItemButton = document.getElementById('addItemButton');
+            const productDetailsDiv = document.getElementById('productDetails');
+            const optionsContainerDiv = document.getElementById('optionsContainer'); // New container for options
+            const itemQuantityInput = document.getElementById('itemQuantity');
+            const itemNotesInput = document.getElementById('itemNotes'); // New notes input
+            const addToCartButton = document.getElementById('addToCartButton');
+            const cartItemsDiv = document.getElementById('cartItems');
+            const totalItemsSpan = document.getElementById('totalItems');
+            const totalPriceSpan = document.getElementById('totalPrice');
+
+            let selectedProductCategory = null; // เก็บชื่อประเภทสินค้าที่เลือกอยู่ (เช่น 'เสื้อ', 'กระเป๋า')
+            let cart = []; // ตะกร้าสินค้า (Array of objects)
+
+            // --- Functions ---
+
+            // 1. Render product category buttons
+            function renderProductCategories() {
+                productCategoriesDiv.innerHTML = ''; // Clear existing buttons
+                const categoryOrder = ['เสื้อ', 'กระเป๋า', 'แก้ว', 'หมวก', 'ร่ม', 'เข็มกลัด', 'สมุด', 'ปากกา'];
+
+                categoryOrder.forEach(category => {
+                    const product = products[category];
+                    if (product) {
+                        const button = document.createElement('button');
+                        // Tailwind Classes for category buttons
+                        button.className = `
+                            flex flex-col items-center flex-shrink-0
+                            px-4 py-3 border border-lighter-blue rounded-lg
+                            bg-light-blue text-primary-blue cursor-pointer
+                            text-sm font-medium whitespace-nowrap
+                            transition-all duration-200 ease-in-out
+                            shadow-sm
+                            hover:bg-blue-100 hover:border-blue-400
+                        `;
+                        
+                        button.innerHTML = `<span>${category}</span>`;
+                        button.dataset.category = category;
+                        productCategoriesDiv.appendChild(button);
+
+                        button.addEventListener('click', function () {
+                            selectProductCategory(this.dataset.category);
+                        });
+                    }
+                });
+            }
+
+            // 2. Select Product Category and Update Display Area
+            function selectProductCategory(category) {
+                selectedProductCategory = category;
+                const product = products[category];
+
+                productImage.src = product.image; // Corrected image path
+                productName.textContent = product.name;
+                productPrice.textContent = `ราคา: ${product.price.toLocaleString()} บาท`;
+                addItemButton.classList.remove('hidden'); 
+                productDetailsDiv.classList.add('hidden');
+                resetProductOptions(); 
+
+                // Manage active state for category buttons
+                document.querySelectorAll('#productCategories button').forEach(btn => {
+                    btn.classList.remove('bg-secondary-blue', 'text-white', 'border-primary-blue', 'shadow-md');
+                    btn.classList.add('bg-light-blue', 'text-primary-blue', 'border-lighter-blue');
+                });
+                const selectedButton = document.querySelector(`[data-category="${category}"]`);
+                if (selectedButton) {
+                    selectedButton.classList.add('bg-secondary-blue', 'text-white', 'border-primary-blue', 'shadow-md');
+                    selectedButton.classList.remove('bg-light-blue', 'text-primary-blue', 'border-lighter-blue');
+                }
+            }
+
+            // Function to dynamically create color radio buttons
+            function createColorRadios(colors, categoryName) {
+                let html = '';
+                if (!colors || colors.length === 0) {
+                    return '<p class="text-gray-500 text-sm">ไม่มีตัวเลือกสีสำหรับสินค้านี้</p>';
+                }
+
+                colors.forEach(color => {
+                    // Check if a specific border is needed (e.g., for white color)
+                    const borderColorClass = color.border ? color.border : '';
+                    html += `
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="radio" name="${categoryName}-color" value="${color.name}" class="form-radio sr-only">
+                            <span class="color-dot ${color.class} ${borderColorClass}"></span>
+                            <span class="text-gray-800">${color.name}</span>
+                        </label>
+                    `;
+                });
+                return `
+                    <div class="form-group mb-4">
+                        <label class="block mb-2 font-bold text-gray-700">สี:</label>
+                        <div class="flex flex-wrap gap-x-6 gap-y-2">
+                            ${html}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Function to dynamically create size select
+            function createSizeSelect(sizes, categoryName) {
+                if (!sizes || sizes.length === 0) {
+                    return '';
+                }
+                let optionsHtml = '<option value="">-- เลือกขนาด --</option>';
+                sizes.forEach(size => {
+                    optionsHtml += `<option value="${size}">${size}</option>`;
+                });
+                return `
+                    <div class="form-group mb-4">
+                        <label for="${categoryName}Size" class="block mb-2 font-bold text-gray-700">ขนาด:</label>
+                        <select id="${categoryName}Size" name="${categoryName}Size" class="form-select">
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                `;
+            }
+
+            // 3. Reset Product Options and hide options container
+            function resetProductOptions() {
+                optionsContainerDiv.innerHTML = ''; 
+                itemQuantityInput.value = 1;
+                itemNotesInput.value = ''; 
+            }
+
+            // 4. Show Product Details (เมื่อกดปุ่ม +)
+            addItemButton.addEventListener('click', function () {
+                productDetailsDiv.classList.remove('hidden');
+                addItemButton.classList.add('hidden'); 
+
+                const product = products[selectedProductCategory];
+                let optionsHtml = '';
+
+                // Add color options if available
+                if (product.options.color && product.options.color.length > 0) {
+                    optionsHtml += createColorRadios(product.options.color, selectedProductCategory.toLowerCase());
+                }
+
+                // Add size options if available (e.g., for 'เสื้อ')
+                if (product.options.size && product.options.size.length > 0) {
+                    optionsHtml += createSizeSelect(product.options.size, selectedProductCategory.toLowerCase());
+                }
+
+                optionsContainerDiv.innerHTML = optionsHtml;
+            });
+
+            // 5. Add to Cart
+            addToCartButton.addEventListener('click', function () {
+                if (!selectedProductCategory) {
+                    alert('กรุณาเลือกสินค้าก่อนเพิ่มลงตะกร้า!');
+                    return;
+                }
+
+                const product = products[selectedProductCategory];
+                const quantity = parseInt(itemQuantityInput.value);
+                const notes = itemNotesInput.value.trim(); 
+
+                if (quantity <= 0 || isNaN(quantity)) {
+                    alert('กรุณาระบุจำนวนสินค้าที่ถูกต้อง');
+                    return;
+                }
+
+                let itemOptions = {};
+                let isValidOptions = true;
+
+                // Handle color selection
+                const colorRadios = document.querySelectorAll(`input[name="${selectedProductCategory.toLowerCase()}-color"]:checked`);
+                if (product.options.color && product.options.color.length > 0) {
+                    if (colorRadios.length > 0) {
+                        itemOptions.color = colorRadios[0].value;
+                    } else {
+                        alert(`กรุณาเลือกสีสำหรับ ${product.name}`);
+                        isValidOptions = false;
+                    }
+                }
+
+                // Handle size selection (specifically for shirts)
+                const sizeSelect = document.getElementById(`${selectedProductCategory.toLowerCase()}Size`);
+                if (product.options.size && product.options.size.length > 0) {
+                    if (sizeSelect && sizeSelect.value) {
+                        itemOptions.size = sizeSelect.value;
+                    } else {
+                        alert(`กรุณาเลือกขนาดสำหรับ ${product.name}`);
+                        isValidOptions = false;
+                    }
+                }
+
+                if (!isValidOptions) return;
+
+                const newItem = {
+                    category: selectedProductCategory,
+                    name: product.name,
+                    price: product.price,
+                    quantity: quantity,
+                    options: itemOptions,
+                    notes: notes 
+                };
+
+                cart.push(newItem);
+                renderCart();
+                resetProductOptions();
+                productDetailsDiv.classList.add('hidden'); 
+                addItemButton.classList.remove('hidden'); 
+                selectProductCategory(selectedProductCategory); 
+            });
+
+            // 6. Render Cart Items
+            function renderCart() {
+                if (cart.length === 0) {
+                    cartItemsDiv.innerHTML = '<p class="text-center text-gray-500 p-2">ยังไม่มีสินค้าในตะกร้า</p>';
+                } else {
+                    cartItemsDiv.innerHTML = '';
+                    let totalItemsCount = 0;
+                    let overallTotalPrice = 0;
+
+                    cart.forEach((item, index) => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = `
+                            flex justify-between items-center py-2
+                            border-b border-dotted border-lighter-blue
+                            text-sm text-text-dark
+                        `;
+                        let optionsText = '';
+                        if (item.options.color) optionsText += `สี: ${item.options.color} `;
+                        if (item.options.size) optionsText += `ขนาด: ${item.options.size}`;
+                        if (optionsText) optionsText = `(${optionsText.trim()})`;
+
+                        let notesHtml = '';
+                        if (item.notes) {
+                            notesHtml = `<p class="text-xs text-gray-500 mt-1"><i>* หมายเหตุ: ${item.notes}</i></p>`;
+                        }
+
+                        itemDiv.innerHTML = `
+                            <div>
+                                <strong class="font-semibold">${item.name}</strong> ${optionsText}<br>
+                                <span class="text-gray-600">${item.quantity} x ${item.price.toLocaleString()} บาท</span>
+                                ${notesHtml}
+                            </div>
+                            <div class="font-bold flex items-center">
+                                ${(item.quantity * item.price).toLocaleString()} บาท
+                                <button data-index="${index}"
+                                    class="remove-item-btn bg-accent-red text-white border-none rounded-md px-2.5 py-1 ml-3 cursor-pointer text-xs hover:bg-red-600 transition-colors duration-200">ลบ</button>
+                            </div>
+                        `;
+                        cartItemsDiv.appendChild(itemDiv);
+
+                        totalItemsCount += item.quantity;
+                        overallTotalPrice += (item.quantity * item.price);
+                    });
+
+                    // Remove last border
+                    if (cartItemsDiv.lastChild) {
+                        cartItemsDiv.lastChild.classList.remove('border-b');
+                    }
+
+                    // Add event listeners for remove buttons
+                    document.querySelectorAll('.remove-item-btn').forEach(button => {
+                        button.addEventListener('click', function () {
+                            const indexToRemove = parseInt(this.dataset.index);
+                            cart.splice(indexToRemove, 1);
+                            renderCart();
+                        });
+                    });
+
+                    totalItemsSpan.textContent = totalItemsCount + ' ชิ้น';
+                    totalPriceSpan.textContent = overallTotalPrice.toLocaleString('th-TH', { style: 'currency', currency: 'THB' });
+                }
+            }
+
+            // --- Initialize ---
+            renderProductCategories();
+            renderCart();
+        });
+    </script>
+</body>
+
+</html>

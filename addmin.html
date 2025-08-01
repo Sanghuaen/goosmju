@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มเตรียมสินค้าเพื่อขาย (Admin Stock)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        // กำหนดค่าสีและธีมเพิ่มเติมใน Tailwind CSS
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#1976D2',      
+                        'secondary-blue': '#2196F3',    
+                        'tertiary-blue': '#BBDEFB',     
+                        'light-blue': '#E3F2FD',       
+                        'dark-blue': '#1565C0',        
+                        'form-bg': '#F5FAFF',           
+                        'text-header': '#263238',       
+                        'accent-green': '#4CAF50',      
+                    },
+                    fontFamily: {
+                        sarabun: ['Sarabun', 'sans-serif'], 
+                    },
+                    boxShadow: {
+                        'custom-lg': '0 10px 25px rgba(0, 0, 0, 0.08)', 
+                        'custom-md': '0 4px 10px rgba(0, 0, 0, 0.05)', 
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif; 
+        }
+        /* Custom class for radio button dot  */
+        .color-dot {
+            width: 1.25rem; 
+            height: 1.25rem; 
+            border-radius: 50%; 
+            margin-right: 0.5rem; 
+            border: 2px solid transparent; 
+            flex-shrink: 0; 
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
+            box-sizing: border-box; 
+        }
+
+        /* Style for when the radio button is checked */
+        input[type="radio"]:checked + .color-dot {
+            border-color: var(--tw-accent-green); 
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3); 
+        }
+        /* Hide default radio button but keep it accessible */
+        .form-radio.sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Custom form input/select styles for better consistency */
+        .form-input, .form-select {
+            @apply px-4 py-3 border rounded-md focus:outline-none focus:ring-2 transition duration-300;
+        }
+        .form-input {
+            @apply border-tertiary-blue focus:ring-secondary-blue focus:border-transparent;
+        }
+        .form-select {
+            @apply border-tertiary-blue bg-white focus:ring-secondary-blue focus:border-transparent;
+        }
+    </style>
+</head>
+<body class="bg-form-bg font-sarabun min-h-screen flex items-center justify-center py-12 px-6">
+
+    <div class="bg-white p-8 md:p-12 rounded-xl shadow-custom-lg w-full max-w-4xl border border-light-blue">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-primary-blue mb-6 md:mb-8">แบบฟอร์มเตรียมสินค้าเพื่อขาย (Admin Stock)</h2>
+        <p class="text-center text-gray-600 mb-8 md:mb-12 text-lg">โปรดกรอกรายละเอียดและประเภทสินค้าแต่ละประเภทเพื่อเตรียมพร้อมสำหรับการขาย</p>
+
+        <div class="mb-10 border border-light-blue rounded-lg overflow-hidden shadow-custom-md">
+            <div class="bg-light-blue border-l-4 border-secondary-blue text-dark-blue p-4 rounded-t-lg flex items-center">
+                <h3 class="text-xl font-semibold">เสื้อ</h3>
+            </div>
+            <div class="p-6 bg-white">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                    <div>
+                        <label for="shirt-name" class="block text-text-header text-sm font-semibold mb-2">ชื่อสินค้า / รุ่น</label>
+                        <input type="text" id="shirt-name" placeholder="เช่น เสื้อยืดคอปกคอตตอน" class="form-input w-full">
+                    </div>
+                    <div>
+                        <label for="shirt-size" class="block text-text-header text-sm font-semibold mb-2">ขนาด</label>
+                        <select id="shirt-size" class="form-select w-full">
+                            <option>S</option>
+                            <option selected>M</option>
+                            <option>L</option>
+                            <option>XL</option>
+                            <option>XXL</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="shirt-price" class="block text-text-header text-sm font-semibold mb-2">ราคา (บาท)</label>
+                        <input type="number" id="shirt-price" placeholder="เช่น 250.00" min="0" class="form-input w-full">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-text-header text-sm font-semibold mb-2">สี</label>
+                    <div class="flex flex-wrap gap-x-6 gap-y-2">
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="radio" name="shirt-color" value="ขาว" class="form-radio sr-only">
+                            <span class="color-dot bg-white border border-gray-300"></span>
+                            <span class="text-gray-800">ขาว</span>
+                        </label>
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="radio" name="shirt-color" value="ดำ" class="form-radio sr-only">
+                            <span class="color-dot bg-black"></span>
+                            <span class="text-gray-800">ดำ</span>
+                        </label>
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="radio" name="shirt-color" value="แดง" class="form-radio sr-only">
+                            <span class="color-dot bg-red-500"></span>
+                            <span class="text-gray-800">แดง</span>
+                        </label>
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="radio" name="shirt-color" value="น้ำเงิน" class="form-radio sr-only">
+                            <span class="color-dot bg-blue-500"></span>
+                            <span class="text-gray-800">น้ำเงิน</span>
+                        </label>
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="radio" name="shirt-color" value="เทา" class="form-radio sr-only">
+                            <span class="color-dot bg-gray-400"></span>
+                            <span class="text-gray-800">เทา</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="shirt-image" class="block text-text-header text-sm font-semibold mb-2">รูปภาพสินค้า</label>
+                        <input type="file" id="shirt-image" accept="image/*" class="form-input w-full py-2">
+                        <small class="block mt-1 text-gray-600 text-xs">รองรับไฟล์รูปภาพเท่านั้น (.jpg, .png, .jpeg)</small>
+                    </div>
+                    <div>
+                        <label for="shirt-stock" class="block text-text-header text-sm font-semibold mb-2">จำนวนสต็อก</label>
+                        <input type="number" id="shirt-stock" placeholder="เช่น 100" min="0" class="form-input w-full">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-10 border border-light-blue rounded-lg overflow-hidden shadow-custom-md">
+            <div class="bg-light-blue border-l-4 border-secondary-blue text-dark-blue p-4 rounded-t-lg flex items-center">
+                <h3 class="text-xl font-semibold">กระเป๋า</h3>
+            </div>
+            <div class="p-6 bg-white">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="bag-name" class="block text-text-header text-sm font-semibold mb-2">ชื่อสินค้า / รุ่น</label>
+                        <input type="text" id="bag-name" placeholder="เช่น กระเป๋าผ้าแคนวาส" class="form-input w-full">
+                    </div>
+                    <div class="mb-6">
+                    <label class="block text-text-header text-sm font-semibold mb-2">สี</label>
+                    <div class="flex flex-wrap gap-x-6 gap-y-2">
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="radio" name="shirt-color" value="ขาว" class="form-radio sr-only">
+                            <span class="color-dot bg-white border border-gray-300"></span>
+                            <span class="text-gray-800">ขาว</span>
+                        </label>
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="radio" name="shirt-color" value="ดำ" class="form-radio sr-only">
+                            <span class="color-dot bg-black"></span>
+                            <span class="text-gray-800">ดำ</span>
+                        </label>
+                        
+                    </div>
+                </div>
+                    <div>
+                        <label for="bag-price" class="block text-text-header text-sm font-semibold mb-2">ราคา (บาท)</label>
+                        <input type="number" id="bag-price" placeholder="เช่น 150.00" min="0" class="form-input w-full">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="bag-image" class="block text-text-header text-sm font-semibold mb-2">รูปภาพสินค้า</label>
+                        <input type="file" id="bag-image" accept="image/*" class="form-input w-full py-2">
+                        <small class="block mt-1 text-gray-600 text-xs">รองรับไฟล์รูปภาพเท่านั้น (.jpg, .png, .jpeg)</small>
+                    </div>
+                    <div>
+                        <label for="bag-stock" class="block text-text-header text-sm font-semibold mb-2">จำนวนสต็อก</label>
+                        <input type="number" id="bag-stock" placeholder="เช่น 50" min="0" class="form-input w-full">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-10 border border-light-blue rounded-lg overflow-hidden shadow-custom-md">
+            <div class="bg-light-blue border-l-4 border-secondary-blue text-dark-blue p-4 rounded-t-lg flex items-center">
+                <h3 class="text-xl font-semibold">แก้ว</h3>
+            </div>
+            <div class="p-6 bg-white">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="glass-name" class="block text-text-header text-sm font-semibold mb-2">ชื่อสินค้า / รุ่น</label>
+                        <input type="text" id="glass-name" placeholder="เช่น แก้วเซรามิก" class="form-input w-full">
+                    </div>
+                    <div>
+                        <label for="glass-price" class="block text-text-header text-sm font-semibold mb-2">ราคา (บาท)</label>
+                        <input type="number" id="glass-price" placeholder="เช่น 100.00" min="0" class="form-input w-full">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="glass-image" class="block text-text-header text-sm font-semibold mb-2">รูปภาพสินค้า</label>
+                        <input type="file" id="glass-image" accept="image/*" class="form-input w-full py-2">
+                        <small class="block mt-1 text-gray-600 text-xs">รองรับไฟล์รูปภาพเท่านั้น (.jpg, .png, .jpeg)</small>
+                    </div>
+                    <div>
+                        <label for="glass-stock" class="block text-text-header text-sm font-semibold mb-2">จำนวนสต็อก</label>
+                        <input type="number" id="glass-stock" placeholder="เช่น 80" min="0" class="form-input w-full">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-10 border border-light-blue rounded-lg overflow-hidden shadow-custom-md">
+            <div class="bg-light-blue border-l-4 border-secondary-blue text-dark-blue p-4 rounded-t-lg flex items-center">
+                <h3 class="text-xl font-semibold">หมวก, ร่ม, เข็มกลัด, สมุด, ปากกา และอื่นๆ</h3>
+            </div>
+            <div class="p-6 bg-white">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="other-type" class="block text-text-header text-sm font-semibold mb-2">ประเภทสินค้า</label>
+                        <select id="other-type" class="form-select w-full">
+                            <option selected>เลือกประเภท</option>
+                            <option>หมวก</option>
+                            <option>ร่ม</option>
+                            <option>เข็มกลัด</option>
+                            <option>สมุด</option>
+                            <option>ปากกา</option>
+                            <option>อื่นๆ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="other-name" class="block text-text-header text-sm font-semibold mb-2">ชื่อสินค้า / รุ่น</label>
+                        <input type="text" id="other-name" placeholder="เช่น หมวกแก๊ปโลโก้, ปากกาเจลสีดำ" class="form-input w-full">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="other-price" class="block text-text-header text-sm font-semibold mb-2">ราคา (บาท)</label>
+                        <input type="number" id="other-price" placeholder="เช่น 150.00" min="0" class="form-input w-full">
+                    </div>
+                    <div>
+                        <label for="other-image" class="block text-text-header text-sm font-semibold mb-2">รูปภาพสินค้า</label>
+                        <input type="file" id="other-image" accept="image/*" class="form-input w-full py-2">
+                        <small class="block mt-1 text-gray-600 text-xs">รองรับไฟล์รูปภาพเท่านั้น (.jpg, .png, .jpeg)</small>
+                    </div>
+                    <div>
+                        <label for="other-stock" class="block text-text-header text-sm font-semibold mb-2">จำนวนสต็อก</label>
+                        <input type="number" id="other-stock" placeholder="เช่น 200" min="0" class="form-input w-full">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-12">
+            <button type="submit" class="bg-primary-blue hover:bg-dark-blue text-white font-bold py-3 px-10 rounded-lg shadow-md transition duration-300 transform hover:-translate-y-1 text-lg">
+                บันทึกสินค้า
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>
